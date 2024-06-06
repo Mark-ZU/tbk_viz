@@ -4,6 +4,7 @@ import sys
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow
+from PySide6.QtQuickWidgets import QQuickWidget
 import PySide6QtAds as QtAds
 
 class TestLabel(QLabel):
@@ -12,6 +13,12 @@ class TestLabel(QLabel):
         self.setWordWrap(True)
         # set center
         self.setAlignment(Qt.AlignCenter)
+
+class TestQuickWidget(QQuickWidget):
+    def __init__(self, qmlFile, parent=None):
+        super().__init__(parent)
+        self.setResizeMode(QQuickWidget.SizeRootObjectToView)
+        self.setSource(os.path.join(os.path.dirname(__file__), qmlFile))
 
 class MainWindow(QMainWindow):
     def __init__(self, title="My App", parent=None):
@@ -29,7 +36,7 @@ class MainWindow(QMainWindow):
         self.dock_manager.addDockWidget(QtAds.TopDockWidgetArea, dock_widget)
 
         dock_widget = QtAds.CDockWidget("Label 2")
-        dock_widget.setWidget(TestLabel("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. "))
+        dock_widget.setWidget(TestQuickWidget("testwidget.qml"))
         self.menuView.addAction(dock_widget.toggleViewAction())
         self.dock_manager.addDockWidget(QtAds.TopDockWidgetArea, dock_widget)
 
